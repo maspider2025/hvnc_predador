@@ -1,0 +1,19 @@
+CLIP:[11:07:26] Painel rodando em 0.0.0.0:5555
+[11:07:35] Cliente 127.0.0.1 conectado.
+[11:07:35] Tree update error: Item 0 already exists
+[11:07:35] Recebidos 21385 bytes, imagem: 21379 bytes
+[11:07:35] Screen error: dados não são JPEG válido | dump salvo: debug_imgs/client_0_110735.jpg
+[11:07:35] Debug raw data salvo: debug_imgs/debug_raw_0_110735.bin
+[11:07:35] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:07:35] Screen atualizada: 21363 bytes
+[11:07:35] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:07:35] Screen atualizada: 21363 bytes
+[11:07:35] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:07:35] Screen atualizada: 21363 bytes
+[11:07:35] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:07:35] Screen atualizada: 21363 bytes
+[11:07:35] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:07:36] Screen atualizada: 21363 bytes
+[11:07:36] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:07:36] Screen atualizada: 21363 bytes
+[11:07:36] Recebidos 21369 bytes, imagem: 21363 by

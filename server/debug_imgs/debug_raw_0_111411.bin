@@ -1,0 +1,19 @@
+CLIP:[11:13:51] Painel rodando em 0.0.0.0:5555
+[11:14:06] Cliente 127.0.0.1 conectado.
+[11:14:06] Tree update error: Item 0 already exists
+[11:14:06] Token de sessão recebido: HVNC-41-48344421
+[11:14:06] Recebidos 22903 bytes, imagem: 22897 bytes
+[11:14:06] Screen error: dados não são JPEG válido | dump salvo: debug_imgs/client_0_111406.jpg
+[11:14:06] Debug raw data salvo: debug_imgs/debug_raw_0_111406.bin
+[11:14:06] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:14:06] Screen atualizada: 21363 bytes
+[11:14:07] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:14:07] Screen atualizada: 21363 bytes
+[11:14:07] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:14:07] Screen atualizada: 21363 bytes
+[11:14:07] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:14:07] Screen atualizada: 21363 bytes
+[11:14:07] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:14:07] Screen atualizada: 21363 bytes
+[11:14:07] Recebidos 21369 bytes, imagem: 21363 bytes
+[11:14:07] Screen atualizada: 21363 by

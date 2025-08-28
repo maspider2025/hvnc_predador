@@ -1,0 +1,8 @@
+CLIP:C:\Users\Pichau\3D Objects\hvnc-predador>cmd /c ""C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\Build\vcvars64.bat" && cl /EHsc /O2 /MT /I"C:\Program Files\OpenSSL-Win64\include" /I"C:\Users\Pichau\3D Objects\hvnc-predador\client" client\main.cpp client\crypt.cpp client\chromestealer.cpp client\stubloader.cpp client\sqlite3.c /Fe:client\main.exe /link /LIBPATH:"C:\Program Files\OpenSSL-Win64\lib\VC\x64\MT" ws2_32.lib gdiplus.lib gdi32.lib crypt32.lib user32.lib kernel32.lib advapi32.lib shell32.lib ole32.lib libssl.lib libcrypto.lib"
+**********************************************************************
+** Visual Studio 2022 Developer Command Prompt v17.14.13
+** Copyright (c) 2025 Microsoft Corporation
+**********************************************************************
+[vcvarsall.bat] Environment initialized for: 'x64'
+Microsoft (R) C/C++ Optimizing Compiler Versão 19.44.35215 para x64
+Copyright (C) Microsoft Corporation. Todos os direitos reser
